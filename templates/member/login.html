@@ -1,0 +1,18 @@
+{% extends "index.html" %}
+
+{% block left %}
+<form action="" method="post">
+	{% csrf_token %}    
+	<legend>Login</legend>
+	{% for field in form.visible_fields %}
+        <div class="control-group">
+            	{{ field.label_tag }}{{ field.errors }}
+		<div class="controls">
+		{{ field }}		
+		</div>            
+        </div>
+    	{% endfor %}
+
+	<input type="submit" name="submit" class="btn btn-primary" value="Login" />
+</form>       
+{% endblock %}

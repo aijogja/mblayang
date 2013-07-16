@@ -1,0 +1,83 @@
+{% extends "wisata/wisata_view.html" %}
+
+{% block left %}
+	{% if wisata  %}	
+		<!-- Post -->
+		<div class="row-fluid">
+		<h3 class="duwur_mepet kiwo_1">{{ wisata.nama }}</h3>
+		<div class="kiwo_1">Kategori : {{ wisata.kategori }}</div>
+		<!-- Kolom Image -->
+		<div id="wisataCarousel" class="span11 duwur_1 {% if gallery  %}carousel slide{% endif %}">			
+			<!-- Carousel items -->
+			<div class="carousel-inner">
+				<div class="active item"><img src="{{ STATIC_URL }}media/{{ wisata.image }}" /></div>
+				{% if gallery  %}
+				{% for gallery in gallery  %}		
+					<div class="item"><img src="{{ STATIC_URL }}media/{{ gallery.image}}" /></div>
+				{% endfor %}
+				{% endif %}
+			</div>
+			{% if gallery  %}
+			<!-- Carousel nav -->
+			<a class="left carousel-control" href="#wisataCarousel" data-slide="prev">&lsaquo;</a>
+			<a class="right carousel-control" href="#wisataCarousel" data-slide="next">&rsaquo;</a>
+			{% endif %}
+		</div>
+		{% if user.is_authenticated %}
+		<div class="span11 duwur_1">
+			<a href="/wisata/{{ wisata.id }}/add_galery" class="btn btn-small"><i class="icon-plus-sign"></i>Add Gallery</a>
+		</div>
+		{% endif %}		
+		<!-- Kolom Descipsi -->
+		<div class="span11 rata_justify duwur_1">
+			{{ wisata.description }}
+		</div>
+		</div>
+		<!-- Small Icons -->	
+		<div class="row-fluid kiwo_1 duwur_1">
+		<div class="span1"><i class="icon-eye-open"></i> {{ wisata.hit }}</div>
+		<div class="span4"><i class="icon-thumbs-up"></i> {{ like.count }} people like this 
+		{% if user.is_authenticated %} | 
+			{% if like.exist %}
+			  <a href='' class='unlike_button' data-id='{{ wisata.id }}'>Unlike</a>
+			{% else %}
+			  <a href='' class='like_button' data-id='{{ wisata.id }}'>Like</a>
+			{% endif %}
+		{% endif %}
+		</div>
+		</div>
+		<hr />	
+		<div>	
+		{% if comment  %}
+		{% for komen in comment  %}		
+			<!-- Commentnya -->
+			<div class="row-fluid">				
+				<div class="span2">
+				<img src="{{ STATIC_URL }}media/{{ wisata.image }}" width="50" height="50" class="img-polaroid" />			
+				</div>
+				<div class="span10">
+				{{ komen.comment|linebreaks }}{{ komen.tanggal }}
+				</div>
+			</div><hr />
+		{% endfor %}
+		{% endif %}
+		</div>
+		
+		{% if user.is_authenticated %}		
+		<div class="row-fluid">
+		<form action="" method="post">
+	      {% csrf_token %}    
+	      {% for field in form.visible_fields %}
+	          <div class="control-group">                
+	          <div class="controls">
+	          {{ field }}   
+	          </div>            
+	          </div>
+	      {% endfor %}    
+	      <input type="submit" name="submit" class="btn btn-info btn-small pull-right" value="Post" />
+	    </form>
+		</div>
+		{% endif %}
+		
+	{% endif %}
+{% endblock %}

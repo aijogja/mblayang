@@ -1,0 +1,71 @@
+{% extends "wisata/wisata_view.html" %}
+
+{% block left %}
+
+    {% if tulisan %}
+        <div class="alert alert-success">
+            <a class="close" data-dismiss="alert" href="#">&times;</a>
+            {{ tulisan }}
+        </div>
+    {% else %}
+    <form action="" method="post" enctype="multipart/form-data">
+    	{% csrf_token %}    
+    	<legend>Add Wisata</legend>
+    	{% for field in form.visible_fields %}
+            <div class="control-group">
+                	{{ field.label_tag }}{{ field.errors }}
+    		<div class="controls">
+    		{{ field }}		
+    		</div>            
+            </div>
+        	{% endfor %}
+
+    	<input type="submit" name="submit" class="btn btn-primary" value="Simpan" />
+    </form>
+    <script type="text/javascript">
+            //<![CDATA[
+            /*(function($) {
+                $(document).ready(function(){
+                    function fill_field(val, init_value){
+                        if (!val || val==''){
+                            options = '<option value="">---------<'+'/option>';
+                            $("#id_kota").html(options);
+                            $('#id_kota option:first').attr('selected', 'selected');
+                            $("#id_kota").trigger('change');
+                            return;
+                        }
+                        $.getJSON("/chaining/filter/wisata/Kota/propinsi/"+val+"/", function(j){
+                            var options = '<option value="">---------<'+'/option>';
+                            for (var i = 0; i < j.length; i++) {
+                                options += '<option value="' + j[i].value + '">' + j[i].display + '<'+'/option>';
+                            }
+                            $("#id_kota").html(options);
+                            $('#id_kota option:first').attr('selected', 'selected');
+                            var auto_choose = false;
+                            if(init_value){
+                                $('#id_kota option[value="'+ init_value +'"]').attr('selected', 'selected');
+                            }
+                            if(auto_choose && j.length == 1){
+                                $('#id_kota option[value="'+ j[0].value +'"]').attr('selected', 'selected');
+                            }
+                            $("#id_kota").trigger('change');
+                        })
+                    }
+
+                    if(!$("#id_propinsi").hasClass("chained")){
+                        var val = $("#id_propinsi").val();
+                        fill_field(val, "None");
+                    }
+
+                    $("#id_propinsi").change(function(){
+                        var start_value = $("#id_kota").val();
+                        var val = $(this).val();
+                        fill_field(val, start_value);
+                    })
+                })
+            })(jQuery || django.jQuery);*/
+            //]]>
+            </script>
+    {% endif %}
+
+{% endblock %}

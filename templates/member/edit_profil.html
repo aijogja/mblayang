@@ -1,0 +1,26 @@
+{% extends "member/registrasi.html" %}
+
+{% block breadcrumb %}
+<ul class="breadcrumb">	
+    <li><a href="/">Home</a> <span class="divider">/</span></li>    
+    <li><a href="/profil/">Profil</a> <span class="divider">/</span></li>
+  	<li class="active">Edit</li>
+</ul>
+{% endblock %}
+
+{% block left %}
+<form action="" method="post" enctype="multipart/form-data">
+	{% csrf_token %}    
+	<legend>Edit Profil</legend>
+	{% for field in form.visible_fields %}
+        <div class="control-group">
+            	{{ field.label_tag }}{{ field.errors }}
+		<div class="controls">
+		{{ field }}
+		</div>            		
+        </div>
+    	{% endfor %}
+	<br /><br />
+	<input type="submit" name="submit" class="btn btn-primary" value="Simpan" />
+</form>
+{% endblock %}

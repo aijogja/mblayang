@@ -1,0 +1,54 @@
+{% extends "index.html" %}
+
+{% block breadcrumb %}
+<ul class="breadcrumb">	
+    {% if breadcrumb  %}     
+    <li><a href="/wisata">Wisata</a> <span class="divider">/</span></li>
+  	<li class="active">{{ breadcrumb }}</li>
+  	{% else %}
+  	<li><a href="/wisata">Wisata</a></li>
+    {% endif %}
+</ul>
+{% endblock %}
+
+{% block left %}
+	{% if latest_wisata  %} 
+	{% for wisata in latest_wisata  %}	
+		<!-- Post -->		
+		<div class="well">
+		<div class="row-fluid">
+		<!-- Kolom Image -->
+		<div class="span4" style="height:170px">
+			<img src="{{ STATIC_URL }}media/{{ wisata.image }}" width="180" height="180" class="img-polaroid" />
+		</div>
+		<!-- Kolom Descipsi -->
+		<div class="span8 rata_justify">
+			<h4 style="margin-top:0px"><a href="/wisata/{{ wisata.id }}">{{ wisata.nama }}</a></h4>
+			<div>Kategori : <a href="/wisata/kategori/{{ wisata.kategori }}">{{ wisata.kategori }}</a></div>
+			<!-- Small Icons -->
+			<div class="ikon"><i class="icon-eye-open"></i> {{ wisata.hit }} <i class="icon-thumbs-up"></i>  {{ wisata.num_like }} <i class="icon-comment"></i> {{ wisata.num_comment }}</div>
+			<div class="duwur_1">{{ wisata.description|safe|truncatewords:"20" }} <a href="/wisata/{{ wisata.id }}">More</a></div>
+		</div>
+		</div>
+		
+		</div>
+	{% endfor %}	
+		{% if pagination  %}
+		<div class="offset2 pagination btn-group">
+		        {% if latest_wisata.has_previous %}
+		        	<a class="btn" href="?page={{ latest_wisata.previous_page_number }}"><i class="icon-chevron-left"></i> Prev</a>
+		        {% else %}
+		        	<span class="btn disabled"><i class="icon-chevron-left"></i> Prev</span>
+		        {% endif %}
+		        <span class="btn disabled">
+		        {{ latest_wisata.number }} of {{ latest_wisata.paginator.num_pages }}
+		        </span>
+		        {% if latest_wisata.has_next %}
+		        <a class="btn" href="?page={{ latest_wisata.next_page_number }}">Next <i class="icon-chevron-right"></i></a>
+		        {% else %}
+		        	<span class="btn disabled">Next <i class="icon-chevron-right"></i></span>
+		        {% endif %}
+		</div>	
+		{% endif %}
+	{% endif %}
+{% endblock %}

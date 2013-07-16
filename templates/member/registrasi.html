@@ -1,0 +1,33 @@
+{% extends "index.html" %}
+
+{% if breadcrumb  %} 
+{% block breadcrumb %}
+<ul class="breadcrumb">	
+    <li><a href="/">Home</a> <span class="divider">/</span></li>
+  	<li class="active">{{ breadcrumb }}</li>
+</ul>
+{% endblock %}
+{% endif %}
+
+{% block left %}
+<form action="" method="post" enctype="multipart/form-data">
+	{% csrf_token %}    
+	<legend>Registrasi</legend>
+	{% for field in form.visible_fields %}
+        <div class="control-group">
+            	{{ field.label_tag }}{{ field.errors }}
+		<div class="controls">
+		{% if field.html_name == 'gender' %}
+			{% for radio in form.gender %}		
+			    <label class="radio inline" style="width:90px">{{ radio.tag }} {{ radio.choice_label }}</label>		
+			{% endfor %}
+		{% else %}
+			{{ field }}
+		{% endif %}		
+		</div>            		
+        </div>
+    	{% endfor %}
+	<br /><br />
+	<input type="submit" name="submit" class="btn btn-primary" value="Register" />
+</form>
+{% endblock %}

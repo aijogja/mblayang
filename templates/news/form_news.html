@@ -1,0 +1,17 @@
+{% extends "news/news_view.html" %}
+
+{% block left %}
+<form action="" method="post" enctype="multipart/form-data">
+	{% csrf_token %}    
+	<legend>Add News</legend>
+	{% for field in form.visible_fields %}
+        <div class="control-group">
+            	{{ field.label_tag }}{{ field.errors }}
+		<div class="controls">
+		{{ field }}		
+		</div>            
+        </div>
+    	{% endfor %}
+	<input type="submit" name="submit" class="btn btn-primary" value="Simpan" />
+</form>
+{% endblock %}

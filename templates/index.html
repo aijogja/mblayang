@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block setail %}
+	{% include "style.html" %}
+{% endblock %}
+
+{% block navbar %}
+        <div class="navbar-inner">
+        <div class="container">
+        <div class="span11">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </a>
+        <a class="brand" href="/">mBlayang</a>
+        <div class="nav-collapse collapse">
+            <ul class="nav">
+                <li {% if request.get_full_path == '/' %}class="active"{% endif %} ><a href="/">Home</a></li>
+                <li><a href="/wisata/">Wisata</a></li>
+                <li><a href="/news/">News</a></li> 
+                {% if all_category %}             
+                <li  class="dropdown"><a  href="#" class="dropdown-toggle" data-toggle="dropdown">Kategory <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    {% for cat in all_category %}
+                    <li><a href="/wisata/kategori/{{ cat.kategori }}">{{ cat.kategori }}</a></li>
+                    {% endfor %}
+                </ul>
+                </li> 
+                {% endif %}
+            </ul> 
+    		{% if user.is_authenticated %}       
+    		<ul class="nav pull-right">
+                <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> {{ user.username }} <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/wisata/add_location/"><i class="icon-globe"></i> Wisata</a></li>
+                    <li><a href="/news/add_news/"><i class="icon-file"></i> News</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/profil/"><i class="icon-user"></i> Profilku</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/logout/"><i class="icon-off"></i> Logout</a></li>
+                </ul>
+                </li>
+            </ul> 
+            {% else %}
+    		<div class="pull-right">
+        		<a href="/login/" class="btn btn-info">Login</a>
+        		<a href="/registration/" class="btn btn-success">Register</a>
+    		</div>     
+    		{% endif %}  	            
+        </div><!--/.nav-collapse -->
+        </div><!--/.container -->
+        </div><!--/.span11 -->
+        </div><!--/.navbar-inner -->
+{% endblock %}
+
+{% block left %}
+	Home
+{% endblock %}
+
+{% block breadcrumb %}
+    <ul class="breadcrumb">
+        <li class="active"><a href="/">Home</a></li>
+    </ul>
+{% endblock %}
+
+{% block right %} 
+        <div class="well">
+            <h4 style="margin-top:0px">Pencarian</h4> 
+            <div class="input-append">
+              <input type="text" placeholder="Masukkan kata kunci...!" class="span3">
+              <button class="btn" type="button">Cari..!</button>
+            </div>                                         
+        </div>
+        {% block tren_wisata %}
+            <div class="well">                             	
+                <h4 style="margin-top:0px">Trend Location</h4>
+                {% if top_news %}
+                    <ul class="right_list">
+                    {% for top in top_wisata %}
+                    <li><i class="icon-chevron-right"></i> <a href="/wisata/{{ top.id}}">{{ top.nama}}</a></li>
+                    {% endfor %}  
+                    </ul>
+                    <a href='/wisata/all'>Tampilkan Semua</a>
+                {% endif %}
+            </div>
+        {% endblock %}
+        {% block favorit_news %}
+            <div class="well"> 
+                <h4 style="margin-top:0px">Favorit News</h4>
+                {% if top_news %}
+                    <ul class="right_list">
+                    {% for top_n in top_news %}
+                    <li><i class="icon-chevron-right"></i> <a href="/news/{{ top_n.id}}" title="{{ top_n.title }}">{{ top_n.title|truncatechars:45}}</a></li>
+                    {% endfor %}  
+                    </ul>
+                    <a href='/news/all'>Tampilkan Semua</a>
+                {% endif %}
+            </div>
+        {% endblock %}
+{% endblock %}

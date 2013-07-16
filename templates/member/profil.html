@@ -1,0 +1,46 @@
+{% extends "member/registrasi.html" %}
+
+{% block left %}
+
+<div class="row-fluid">
+	<div class="span3"><h4>My Profil</h4></div>
+	<div class="span2 pull-right" style="padding-top:10px"><a href="/profil/edit" class="btn btn-small"><i class="icon-edit"></i> Edit Profil</a></div>
+</div>
+<div class="row-fluid">
+	<!-- Kolom Photo -->
+	<div class="span4 kolom_photo">	 
+		{% if profil.foto %}
+		<img src="{{ STATIC_URL }}media/{{ profil.foto }}" width="170" height="170" class="img-polaroid ppnya" >
+		{% else %}
+		<img src="{{ STATIC_URL }}media/foto/default_pp.jpg" width="170" height="170" class="img-polaroid ppnya" >
+		{% endif %}
+		<a href="/profil/change_picture" class="btn btn-small" style="margin-top:5px"><i class="icon-camera"></i> Change Picture</a>
+	</div>
+	<!-- Kolom Detail -->
+	<div class="span8">
+		<h4 style="margin-top:0px">{{ profil.nama }}</h4>
+		<div>{{ profil.alamat }}</div>
+		<div>{{ profil.no_hape }}</div>
+		<div>{{ profil.tgl_lahir }}</div>
+	</div>
+</div>
+
+<h4>My Gallery</h4>	                    
+<div class="row-fluid" class="profil_photo">
+	<div class="span12">
+		{% if gallery  %}		
+		<ul id="gallerycarousel" class="jcarousel-skin-tango">
+		{% for gallery in gallery  %}
+			<li><a href="{{ STATIC_URL }}media/{{ gallery.image}}" title=""><img src="{{ STATIC_URL }}media/{{ gallery.image}}" width="70" height="70" class="img-polaroid" ></a></li>
+		{% endfor %}
+		</ul>
+		{% else %}
+			You don't have any gallery.
+		{% endif %}
+	</div>
+</div>
+<div>
+	
+</div>
+
+{% endblock %}
