@@ -9,11 +9,12 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.utils.dateformat import format, time
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives, EmailMessage
 from apps.member.forms import RegistrasiForm, LoginForm, EditProfilForm, ChangePhotoForm
 from apps.member.models import Profil, get_file_path
 from apps.wisata.models import Gallery, Kota
 from mblayang.views import custom_proc
+
 import base64
 
 def registrasi(request):
@@ -53,7 +54,11 @@ def registrasi(request):
 			
 			activatekey = base64.urlsafe_b64encode(emailnya)
 			message = 'Aktifkan akun Anda dengan mengclick link berikut. <a href="'+ request.META['HTTP_HOST'] +'/activate/' + activatekey + '">Aktifkan</a>'
-			send_mail('Aktivasi mBlayang Akun', message, 'no-reply@mblayang.com', [emailnya], fail_silently=False)
+			#send_mail('Aktivasi mBlayang Akun', message, 'no-reply@mblayang.com', [emailnya], fail_silently=False)
+			subject, from_email = 'Aktivasi mBlayang Akun', 'no-reply@mblayang.com'
+			msg = EmailMessage(subject, message, from_email, [emailnya])
+			msg.content_subtype = "html"  # Main content is now text/html
+			msg.send()
 			
 			messages.success(request, "Registrasi Success. Please cek your email to activate.")
 			return HttpResponseRedirect('/wisata/') 		# Redirect after POST
