@@ -12,7 +12,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from apps.member.forms import RegistrasiForm, LoginForm, EditProfilForm, ChangePhotoForm
 from apps.member.models import Profil, get_file_path
-from apps.wisata.models import Gallery
+from apps.wisata.models import Gallery, Kota
 from mblayang.views import custom_proc
 import base64
 
@@ -23,6 +23,7 @@ def registrasi(request):
 		form = RegistrasiForm(request.POST)		# isi value pada form sesuai yg di POST
 		if form.is_valid():				# cek validasi
 			# Data ada di array form.cleaned_data	
+			kota = Kota.objects.get(pk=form.cleaned_data['kota'])
 			emailnya = form.cleaned_data['email']			
 			user = User.objects.create_user(email = emailnya,	#create user
 				username = form.cleaned_data['username'],
@@ -35,7 +36,7 @@ def registrasi(request):
 			member.nama = form.cleaned_data['nama']
 			member.alamat = form.cleaned_data['alamat']
 			member.tgl_lahir = form.cleaned_data['tgl_lahir']
-			member.kota = form.cleaned_data['kota']
+			member.kota = kota
 			member.propinsi = form.cleaned_data['propinsi']
 			member.no_hape = form.cleaned_data['no_hape']
 			member.gender = form.cleaned_data['gender']
@@ -55,7 +56,7 @@ def registrasi(request):
 			send_mail('Aktivasi mBlayang Akun', message, 'no-reply@mblayang.com', [emailnya], fail_silently=False)
 			
 			messages.success(request, "Registrasi Success. Please cek your email to activate.")
-			return HttpResponseRedirect('/') 		# Redirect after POST
+			return HttpResponseRedirect('/wisata/') 		# Redirect after POST
 	else:
 		form = RegistrasiForm() 			# value form kosongan
 
@@ -132,12 +133,13 @@ def profil_edit(request):
 	if request.method == 'POST':				# ketika submit data
 		form = EditProfilForm(request.POST, instance=profil)		# isi value pada form sesuai yg di POST
 		if form.is_valid():				# cek validasi
-			# Data ada di array form.cleaned_data						
+			# Data ada di array form.cleaned_data
+			#kota = Kota.objects.get(pk=form.cleaned_data['kota'])					
 			profil.nama = form.cleaned_data['nama']
 			profil.alamat = form.cleaned_data['alamat']
 			profil.tgl_lahir = form.cleaned_data['tgl_lahir']
-			profil.kota = form.cleaned_data['kota']
-			profil.propinsi = form.cleaned_data['propinsi']
+			#profil.kota = kota
+			#profil.propinsi = form.cleaned_data['propinsi']
 			profil.no_hape = form.cleaned_data['no_hape']
 			profil.gender = form.cleaned_data['gender']	
 			profil.save()						#update data tambahan user ke member			

@@ -92,6 +92,14 @@ class Like(models.Model):
 	
 	class Meta:
 		unique_together = ('user', 'wisata')
+
+class Laporkan(models.Model):
+	user = models.ForeignKey(User)
+	wisata = models.ForeignKey(Wisata)
+	alasan = models.TextField(blank=True, null=True)
+
+	class Meta:
+		verbose_name_plural = "Laporan"
 		    
 @receiver(pre_delete, sender=Wisata)
 def wisata_delete(sender, instance, **kwargs):

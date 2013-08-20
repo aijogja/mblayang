@@ -1,4 +1,4 @@
-from apps.wisata.models import Wisata, Propinsi, Kota, Kategori, Comment, Like, Gallery
+from apps.wisata.models import Wisata, Propinsi, Kota, Kategori, Comment, Like, Gallery, Laporkan
 from django.contrib import admin
 
 class KotaInline(admin.TabularInline):
@@ -30,6 +30,11 @@ class WisataAdmin(admin.ModelAdmin):
 	list_filter = ('kategori','propinsi')
 	inlines = [CommentInline, LikeInline, GalleryInline]
 
+class LaporkanAdmin(admin.ModelAdmin):
+    list_display = ('user', 'wisata', 'alasan')
+    list_filter = ('user','wisata')
+
+admin.site.register(Laporkan, LaporkanAdmin)
 admin.site.register(Wisata, WisataAdmin)
 admin.site.register(Propinsi, PropinsiAdmin)
 admin.site.register(Kategori)

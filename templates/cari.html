@@ -1,0 +1,14 @@
+{% extends "index.html" %}
+
+{% block left %}
+	<div class="row-fluid">
+		<h4 class="duwur_mepet kiwo_1">Hasil Pencarian</h4>
+	    {% if hasil %}
+	        <ul class="right_list">
+	        {% for value in hasil %}
+	        <li><i class="icon-chevron-right"></i> <a href="{{ value.detail }}">{{ value.nama }}</a> <span class="muted"><em>{{ value.jenis }}</em></span></li>
+	        {% endfor %}  
+	        </ul>
+	    {% endif %}    
+	</div>
+{% endblock %}

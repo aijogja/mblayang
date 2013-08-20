@@ -123,7 +123,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'south',        # migrate database
     'smart_selects',        # chained field
-    'django_extensions',
+    #'django_extensions',
     #'registration',  # registration rasido dinggo
     'apps.member',  # member
     'apps.wisata',  # wisata
@@ -187,3 +187,11 @@ ADMIN_MEDIA_PREFIX = ""
 
 # Email backend to send mail
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+"""
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'mblayang@gmail.com'
+EMAIL_HOST_PASSWORD = 'password'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+"""

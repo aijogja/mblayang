@@ -4,20 +4,22 @@ from django.core.validators import ValidationError
 from apps.wisata.models import Propinsi, Kota, Kategori
 from apps.member.models import Profil
 
+class DynamicChoiceField(forms.ChoiceField): 
+	def clean(self, value):
+		return value
+
 class RegistrasiForm(forms.Form):
-	email = forms.EmailField(label='Email', widget = forms.TextInput(attrs={'class':'span4'}))
-	username = forms.CharField(label='Username', widget = forms.TextInput(attrs={'class':'span4'}))
-	password = forms.CharField(label='Password', max_length=100, widget = forms.PasswordInput(render_value=False, attrs={'class':'span4'}))
-	repassword = forms.CharField(label='Verify Password', max_length=100, widget = forms.PasswordInput(render_value=False, attrs={'class':'span4'}))
-	nama = forms.CharField(label='Full Name', max_length=200, widget = forms.TextInput(attrs={'class':'span4'}))
-	alamat = forms.CharField(label='Address', max_length=100, widget = forms.TextInput(attrs={'class':'span4'}))
+	email = forms.EmailField(label='Email', widget = forms.TextInput(attrs={'class':'span3'}))
+	username = forms.CharField(label='Username', widget = forms.TextInput(attrs={'class':'span3'}))
+	password = forms.CharField(label='Password', max_length=100, widget = forms.PasswordInput(render_value=False, attrs={'class':'span3'}))
+	repassword = forms.CharField(label='Verify Password', max_length=100, widget = forms.PasswordInput(render_value=False, attrs={'class':'span3'}))
+	nama = forms.CharField(label='Full Name', max_length=200, widget = forms.TextInput(attrs={'class':'span3'}))
+	alamat = forms.CharField(label='Address', max_length=100, widget = forms.TextInput(attrs={'class':'span3'}))
 	image = forms.FileField(label='Picture', required=False)
-	tgl_lahir = forms.DateField(label='Date of Birth', widget = forms.TextInput(attrs={'class':'span2 datepiker'}))
-	propinsi = forms.ModelChoiceField(queryset=Propinsi.objects.all(), widget = forms.Select(attrs={'class':'span2'}))	
-	kota = forms.ModelChoiceField(queryset=Kota.objects.all(), widget = forms.Select(attrs={'class':'span2'}))
-	#kota = forms.CharField(label='City ', max_length=50, widget = forms.TextInput(attrs={'class':'span2'}))	
-	#propinsi = forms.CharField(label='State ', max_length=50, widget = forms.TextInput(attrs={'class':'span2'}))
-	no_hape = forms.CharField(label='Phone ', max_length=20, widget = forms.TextInput(attrs={'class':'span4'}), required=False)
+	tgl_lahir = forms.DateField(label='Date of Birth', widget = forms.TextInput(attrs={'class':'span3 datepiker'}))
+	propinsi = forms.ModelChoiceField(queryset=Propinsi.objects.all(), widget = forms.Select(attrs={'class':'span3'}))	
+	kota = DynamicChoiceField(widget=forms.Select(attrs={'class':'span3', 'disabled':'true'}), choices=(('0','Pilih Propinsi dulu'),))
+	no_hape = forms.CharField(label='Phone ', max_length=20, widget = forms.TextInput(attrs={'class':'span3'}), required=False)
 	Gender_choise = (('L', 'Laki-Laki'),('P', 'Perempuan'))
 	gender = forms.ChoiceField(label='Gender ', widget = forms.RadioSelect(), choices = Gender_choise)
 
@@ -45,9 +47,21 @@ class RegistrasiForm(forms.Form):
 		return repassword
 
 class EditProfilForm(forms.ModelForm):
-	class Meta:
-		model = Profil
-		fields = ['nama', 'alamat', 'tgl_lahir', 'propinsi', 'kota', 'no_hape', 'gender']	
+	nama = forms.CharField(label='Full Name', max_length=200, widget = forms.TextInput(attrs={'class':'span3'}))
+	alamat = forms.CharField(label='Address', max_length=100, widget = forms.TextInput(attrs={'class':'span3'}))
+	image = forms.FileField(label='Picture', required=False)
+	tgl_lahir = forms.DateField(label='Date of Birth', widget = forms.TextInput(attrs={'class':'span3 datepiker'}))
+	#propinsi = forms.ModelChoiceField(queryset=Propinsi.objects.all(), widget = forms.Select(attrs={'class':'span3'}))	
+	#kota = DynamicChoiceField(widget=forms.Select(attrs={'class':'span3', 'disabled':'true'}), choices=(('0','Pilih Propinsi dulu'),))
+	no_hape = forms.CharField(label='Phone ', max_length=20, widget = forms.TextInput(attrs={'class':'span3'}), required=False)
+	Gender_choise = (('L', 'Laki-Laki'),('P', 'Perempuan'))
+	gender = forms.ChoiceField(label='Gender ', widget = forms.RadioSelect(), choices = Gender_choise)
+	#class Meta:
+	#	model = Profil
+	#	fields = ['nama', 'alamat', 'tgl_lahir', 'propinsi', 'kota', 'no_hape', 'gender']	
+	#	widgets = {
+    #       'tgl_lahir': forms.TextInput(attrs={'class':'datepiker'}),
+    #  }
 
 class ChangePhotoForm(forms.Form):
 	image = forms.FileField(label='Picture', required=False)	

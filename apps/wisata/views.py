@@ -10,7 +10,8 @@ from django.conf import settings
 from django.db.models import Count
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from apps.wisata.models import Wisata, Kategori, Comment, Like, Gallery, Kota, get_file_path
+from django.views.decorators.csrf import csrf_exempt
+from apps.wisata.models import Wisata, Kategori, Comment, Like, Gallery, Kota, Laporkan, get_file_path
 from apps.wisata.forms import AddWisata, CommentForm, AddGallery
 from mblayang.views import custom_proc
 
@@ -63,6 +64,13 @@ def wisata_detail(request, id_wisata):
                 exis = None
         
         like = {'count':likenya.count,'exist':exis}
+
+        laporan = None
+        if request.user.is_authenticated():
+            try:
+                laporan = Laporkan.objects.get(user=request.user,wisata=id_wisata)
+            except Laporkan.DoesNotExist:
+                laporan = None        
         
         if request.method == 'POST':                # ketika submit data
             form = CommentForm(request.POST, request.FILES)   
@@ -80,7 +88,7 @@ def wisata_detail(request, id_wisata):
         else:
             form = CommentForm()             # value form kosongan
     
-        datanya = {'wisata':detail, 'comment':comment, 'like':like, 'gallery':gallery, 'form':form, 'slide_show' : False, 'breadcrumb': breadcrumb}
+        datanya = {'wisata':detail, 'comment':comment, 'like':like, 'gallery':gallery, 'form':form, 'slide_show' : False, 'breadcrumb': breadcrumb, 'laporan':laporan}
         return render_to_response('wisata/wisata_detail.html',datanya, context_instance=RequestContext(request, processors=[custom_proc]))
 
 @login_required
@@ -110,6 +118,7 @@ def add_wisata(request):
         if form.is_valid():
             # Data ada di array form.cleaned_data
             user = User.objects.get(pk=request.user.id)
+            kota = Kota.objects.get(pk=form.cleaned_data['kota'])
             wisata = Wisata()
             wisata.nama = form.cleaned_data['nama']
             wisata.description = form.cleaned_data['description']
@@ -117,7 +126,7 @@ def add_wisata(request):
             wisata.member = user
             wisata.kategori = form.cleaned_data['kategori']
             wisata.propinsi = form.cleaned_data['propinsi']
-            wisata.kota = form.cleaned_data['kota']         
+            wisata.kota = kota         
             
             f = request.FILES['image']          
             path = get_file_path(request,f.name)
@@ -139,14 +148,12 @@ def add_wisata(request):
     datanya = {'form' : form,'breadcrumb': breadcrumb}
     return render_to_response('wisata/form_wisata.html',datanya, context_instance=RequestContext(request, processors=[custom_proc]))
 
-"""
-@login_required
 def get_city(request, id_propinsi):   
     kota = Kota.objects.all().filter(propinsi=id_propinsi)
     json = serializers.serialize('json', kota)
 
     return HttpResponse(json, mimetype='application/json')
-"""
+
 """
 @login_required
 def add_sukses(request):
@@ -187,3 +194,21 @@ def add_gallery(request, id_wisata):
     breadcrumb = 'Add Gallery'
     datanya = {'form':form, 'breadcrumb': breadcrumb}
     return render_to_response('wisata/form_gallery.html',datanya, context_instance=RequestContext(request, processors=[custom_proc]))
+
+@login_required
+@csrf_exempt
+def laporkan(request):
+    if request.method == "POST" and request.is_ajax:
+        laporkan = Laporkan()
+        wisata = Wisata.objects.get(pk=request.POST["wisata_id"]) 
+
+        laporkan.user = request.user
+        laporkan.wisata = wisata
+        laporkan.alasan = request.POST["alasan"]
+        laporkan.save()
+        msg = "Sukses."
+        
+    else:
+        msg = "Ajax Post only."
+
+    return HttpResponse(msg)

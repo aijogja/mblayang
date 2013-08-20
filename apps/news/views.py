@@ -46,7 +46,7 @@ def news_add(request):
             # Data ada di array form.cleaned_data           
             user = User.objects.get(pk=request.user.id)
             news = News()
-            news.nama = form.cleaned_data['title']
+            news.title = form.cleaned_data['title']
             news.description = form.cleaned_data['description']
             news.member = user
             

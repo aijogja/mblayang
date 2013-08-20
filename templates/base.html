@@ -117,7 +117,33 @@
   $('.dropdown-menu').find('form').click(function (e) {
     e.stopPropagation();
   });
+
+  $('#laporkan_modal').modal({
+    'backdrop'  : 'static',
+    'keyboard'  : false,
+    'show'      : false,
+  });
   
+  $("#btnkirim").click(function(){   
+    var alasan = $('textarea[name="alasan"]').val();
+    var postdata = $("#laporkan_form").serialize();
+
+    if (!alasan) {     
+      $("#error_model").html('<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">×</button>This field is required</div>');      
+    } else {
+      $.ajax({
+        data: postdata,
+        type: 'POST',
+        url: '/wisata/laporkan/', 
+        success: function(data) {
+          alert(data);          
+          $('#laporkan_modal').modal('hide'); 
+          $("#error_model").html('');            
+        },       
+      });  
+    } 
+  });
+
   $('.carousel').carousel();
 </script>
 <!-- All -->
@@ -129,6 +155,11 @@
       $('#status2').html(coords);      
     }); 
     
+    $(".judul").hover(
+      function() { $(this).children('.post_action').show(); },
+      function() { $(this).children('.post_action').hide(); }
+    );
+
     $('.map').maphilight({
       groupBy: 'title'
     });
@@ -157,23 +188,33 @@
       return false;      
     });
 
-    /*$('#id_propinsi').change(function(e){
-      $('.append').remove();
-      var url = "/ajax/get_city/"+ $(this).val();   
-      $.ajax ({
-        url: url ,
-        success: function(msg){  
-          $.each(msg, function (index, value) {
-            //alert(value.pk);
-            //alert(value.fields.nama_kota);
-            $('#id_kota').append('<option value="'+value.pk+'" class="append">'+value.fields.nama_kota+'</option>');
-            $('#id_kota').removeAttr('disabled');
-              //console.log(value);
-          });
-        }
-      });
-    });*/
+    $('#id_propinsi').change(function(e){
+      get_city($(this).val());
+    });
+
+    $('#id_kota').change(function(e){
+      //alert($(this).val());
+    });
+
+    if($('#id_propinsi').val()){
+      get_city($('#id_propinsi').val());
+      $('#id_kota').removeAttr('disabled');
+    }
   })
+
+  function get_city(id_prop){
+    $('.append').remove();
+    var url = "/ajax/get_city/"+ id_prop;   
+    $.ajax ({
+      url: url ,
+      success: function(msg){  
+        $.each(msg, function (index, value) {
+          $('#id_kota').append('<option value="'+value.pk+'" class="append">'+value.fields.nama_kota+'</option>');
+          $('#id_kota').removeAttr('disabled');
+        });
+      }
+    });
+  }
 </script>
 <!-- JCarousel -->
 <script type="text/javascript">

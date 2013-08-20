@@ -69,8 +69,11 @@
         <div class="well">
             <h4 style="margin-top:0px">Pencarian</h4> 
             <div class="input-append">
-              <input type="text" placeholder="Masukkan kata kunci...!" class="span3">
-              <button class="btn" type="button">Cari..!</button>
+                <form method="post" action="/cari/">
+                    {% csrf_token %} 
+                    <input type="text" name="cari" placeholder="Masukkan kata kunci...!" class="span3">
+                    <button class="btn" type="submit">Cari..!</button>
+                </form>
             </div>                                         
         </div>
         {% block tren_wisata %}
