@@ -15,7 +15,7 @@ class RegistrasiForm(forms.Form):
 	repassword = forms.CharField(label='Verify Password', max_length=100, widget = forms.PasswordInput(render_value=False, attrs={'class':'span3'}))
 	nama = forms.CharField(label='Full Name', max_length=200, widget = forms.TextInput(attrs={'class':'span3'}))
 	alamat = forms.CharField(label='Address', max_length=100, widget = forms.TextInput(attrs={'class':'span3'}))
-	image = forms.FileField(label='Picture', required=False)
+	#image = forms.FileField(label='Picture', required=False)
 	tgl_lahir = forms.DateField(label='Date of Birth', widget = forms.TextInput(attrs={'class':'span3 datepiker'}))
 	propinsi = forms.ModelChoiceField(queryset=Propinsi.objects.all(), widget = forms.Select(attrs={'class':'span3'}))	
 	kota = DynamicChoiceField(widget=forms.Select(attrs={'class':'span3', 'disabled':'true'}), choices=(('0','Pilih Propinsi dulu'),))
@@ -49,7 +49,7 @@ class RegistrasiForm(forms.Form):
 class EditProfilForm(forms.ModelForm):
 	nama = forms.CharField(label='Full Name', max_length=200, widget = forms.TextInput(attrs={'class':'span3'}))
 	alamat = forms.CharField(label='Address', max_length=100, widget = forms.TextInput(attrs={'class':'span3'}))
-	image = forms.FileField(label='Picture', required=False)
+	#image = forms.FileField(label='Picture', required=False)
 	tgl_lahir = forms.DateField(label='Date of Birth', widget = forms.TextInput(attrs={'class':'span3 datepiker'}))
 	#propinsi = forms.ModelChoiceField(queryset=Propinsi.objects.all(), widget = forms.Select(attrs={'class':'span3'}))	
 	#kota = DynamicChoiceField(widget=forms.Select(attrs={'class':'span3', 'disabled':'true'}), choices=(('0','Pilih Propinsi dulu'),))

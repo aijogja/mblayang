@@ -42,6 +42,7 @@ def registrasi(request):
 			member.no_hape = form.cleaned_data['no_hape']
 			member.gender = form.cleaned_data['gender']
 			
+			"""
 			f = request.FILES['image']			
 			path = get_file_path(request,f.name)
 			fd = open('%s/%s' % (settings.MEDIA_ROOT, str(path)), 'wb')
@@ -50,6 +51,7 @@ def registrasi(request):
 			fd.close()	
 			
 			member.foto = path
+			"""
 			member.save()						#insert data tambahan user ke member
 			
 			activatekey = base64.urlsafe_b64encode(emailnya)
