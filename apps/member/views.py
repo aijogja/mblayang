@@ -55,7 +55,7 @@ def registrasi(request):
 			member.save()						#insert data tambahan user ke member
 			
 			activatekey = base64.urlsafe_b64encode(emailnya)
-			message = 'Aktifkan akun Anda dengan mengclick link berikut. <a href="'+ request.META['HTTP_HOST'] +'/activate/' + activatekey + '">Aktifkan</a>'
+			message = 'Aktifkan akun Anda dengan mengclick link aktifkan berikut, <a href="'+ request.META['HTTP_HOST'] +'/activate/' + activatekey + '">Aktifkan</a>.<br/>Atau silahkan copy alamat url berikut dan paste di browser Anda, <i>'+ request.META['HTTP_HOST'] +'/activate/' + activatekey + '</i>.'
 			#send_mail('Aktivasi mBlayang Akun', message, 'no-reply@mblayang.com', [emailnya], fail_silently=False)
 			subject, from_email = 'Aktivasi mBlayang Akun', 'no-reply@mblayang.com'
 			msg = EmailMessage(subject, message, from_email, [emailnya])
@@ -63,7 +63,7 @@ def registrasi(request):
 			msg.send()
 			
 			messages.success(request, "Registrasi Success. Please cek your email to activate.")
-			return HttpResponseRedirect('/wisata/') 		# Redirect after POST
+			return HttpResponseRedirect('/login/') 		# Redirect after POST
 	else:
 		form = RegistrasiForm() 			# value form kosongan
 
@@ -84,7 +84,7 @@ def activation(request, key):
 	user.save()
 
 	messages.success(request, "Activation Success. Please login.")
-	return HttpResponseRedirect('/') 
+	return HttpResponseRedirect('/login/') 
 
 def login_view(request):
 	if request.user.is_authenticated():
