@@ -17,24 +17,25 @@
     <div class="well">
     <div class="row-fluid">
     <h3 class="duwur_mepet kiwo_1">{{ latest_news.title }}</h3>
-    <div class="kiwo_1 muted" style="margin-bottom:15px">{{ latest_news.tanggal }}</div>
+    <div class="kiwo_1 muted tgl" style="margin-bottom:15px">{{ latest_news.tanggal }}</div>
     <!-- Kolom Descipsi -->
     <div class="span11 rata_justify">
       {% if latest_news.image %}
-      <img class="pull-left tengen_1 img-polaroid" src="{{ STATIC_URL }}media/{{ latest_news.image }}" width="180" height="180" />
+      <img class="pull-left tengen_1 img-polaroid imagepost" src="{{ STATIC_URL }}media/{{ latest_news.image }}" />
       {% endif %}
       <p>{{ latest_news.description }}</p>
     </div>
     </div>
     </div>
   {% endif %}
+
   {% if list_news  %} 
   {% for news in list_news  %}
     <!-- Post -->
     <div class="well">
     <div class="row-fluid">
     <h4 class="duwur_mepet kiwo_1">{{ news.title }}</h4>
-    <div class="kiwo_1 muted" style="margin-bottom:15px">{{ news.tanggal }}</div>
+    <div class="kiwo_1 muted tgl" style="margin-bottom:15px">{{ news.tanggal }}</div>
     <!-- Kolom Descipsi -->
     <div class="span11 rata_justify">
       {% if news.image %}
@@ -45,7 +46,9 @@
     </div>
     </div>
   {% endfor %}
-  {% else %}
+  {% endif %}
+  
+  {% if not list_news and not latest_news %}
   <div class="alert alert-info">    
     Data masih kosong
   </div>

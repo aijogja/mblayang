@@ -24,7 +24,7 @@ def registrasi(request):
 		form = RegistrasiForm(request.POST)		# isi value pada form sesuai yg di POST
 		if form.is_valid():				# cek validasi
 			# Data ada di array form.cleaned_data	
-			kota = Kota.objects.get(pk=form.cleaned_data['kota'])
+			#kota = Kota.objects.get(pk=form.cleaned_data['kota'])
 			emailnya = form.cleaned_data['email']			
 			user = User.objects.create_user(email = emailnya,	#create user
 				username = form.cleaned_data['username'],
@@ -32,7 +32,7 @@ def registrasi(request):
 			)
 			user.is_active = False
 			user.save()
-
+			"""
 			member = user.get_profile()
 			member.nama = form.cleaned_data['nama']
 			member.alamat = form.cleaned_data['alamat']
@@ -40,18 +40,17 @@ def registrasi(request):
 			member.kota = kota
 			member.propinsi = form.cleaned_data['propinsi']
 			member.no_hape = form.cleaned_data['no_hape']
-			member.gender = form.cleaned_data['gender']
+			member.gender = form.cleaned_data['gender']			
 			
-			"""
 			f = request.FILES['image']			
 			path = get_file_path(request,f.name)
 			fd = open('%s/%s' % (settings.MEDIA_ROOT, str(path)), 'wb')
 			for chunk in f.chunks():
 				fd.write(chunk)
 			fd.close()	
-			
-			member.foto = path
 			"""
+			member = user.get_profile()
+			member.foto = 'foto/default_pp.jpg'
 			member.save()						#insert data tambahan user ke member
 			
 			activatekey = base64.urlsafe_b64encode(emailnya)

@@ -17,10 +17,10 @@
 		<div id="wisataCarousel" class="span11 duwur_1 {% if gallery  %}carousel slide{% endif %}">			
 			<!-- Carousel items -->
 			<div class="carousel-inner">
-				<div class="active item"><img src="{{ STATIC_URL }}media/{{ wisata.image }}" /></div>
+				<div class="active item img-polaroid"><img class="img-rounded" src="{{ STATIC_URL }}media/{{ wisata.image }}" /></div>
 				{% if gallery  %}
 				{% for gallery in gallery  %}		
-					<div class="item"><img src="{{ STATIC_URL }}media/{{ gallery.image}}" /></div>
+					<div class="item img-polaroid"><img class="img-rounded" src="{{ STATIC_URL }}media/{{ gallery.image}}" /></div>
 				{% endfor %}
 				{% endif %}
 			</div>
@@ -42,8 +42,8 @@
 		</div>
 		<!-- Small Icons -->	
 		<div class="row-fluid kiwo_1 duwur_1">
-		<div class="span1"><i class="icon-eye-open"></i> {{ wisata.hit }}</div>
-		<div class="span4"><i class="icon-thumbs-up"></i> {{ like.count }} people like this 
+		<div class="pull-left"><i class="icon-eye-open"></i> {{ wisata.hit }}</div>
+		<div class="pull-left" style="margin-left:10px"><i class="icon-thumbs-up"></i> {{ like.count }} people like this 
 		{% if user.is_authenticated %} | 
 			{% if like.exist %}
 			  <a href='' class='unlike_button' data-id='{{ wisata.id }}'>Unlike</a>
@@ -60,10 +60,12 @@
 			<!-- Commentnya -->
 			<div class="row-fluid">				
 				<div class="span2">
-				<img src="{{ STATIC_URL }}media/{{ wisata.image }}" width="50" height="50" class="img-polaroid" />			
+				<img src="{{ STATIC_URL }}media/{{ komen.gambar }}" width="50" height="50" class="img-rounded komeng" />			
 				</div>
 				<div class="span10">
-				{{ komen.comment|linebreaks }}{{ komen.tanggal }}
+				<div><b>{{ komen.nama }}</b></div>
+				{{ komen.comment|linebreaks }}
+				<div class="tgl">{{ komen.tanggal }}</div>
 				</div>
 			</div><hr />
 		{% endfor %}

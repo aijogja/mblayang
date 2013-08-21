@@ -41,20 +41,31 @@ def wisata_all(request):
 def wisata_category(request, category):   
     latest_wisata = Wisata.objects.filter(kategori__kategori=category).annotate(num_comment=Count('comment', distinct=True)).annotate(num_like=Count('like', distinct=True))
     slide_show = Wisata.objects.filter(kategori__kategori=category)
-    breadcrumb = 'Kategori'
+    breadcrumb = 'Kategori ' + category
 
     datanya = {'latest_wisata': latest_wisata, 'slide_show': slide_show, 'breadcrumb': breadcrumb}
     return render_to_response('wisata/wisata_view.html',datanya, context_instance=RequestContext(request, processors=[custom_proc]))
 
 def wisata_detail(request, id_wisata):    
         detail = get_object_or_404(Wisata, pk=id_wisata)
-        comment = Comment.objects.select_related().filter(wisata=id_wisata)
+        komen = Comment.objects.select_related().filter(wisata=id_wisata)
         likenya = Like.objects.select_related().filter(wisata=id_wisata)        
         gallery = Gallery.objects.select_related().filter(wisata=id_wisata, visible=1)
         breadcrumb = 'Detail'
 
         detail.hit += 1
         detail.save()
+
+        comment = []
+        for komeng in komen:
+            user = User.objects.get(username=komeng.user)
+            profil = user.get_profile()
+            comment.append({
+                'nama' : profil.nama,
+                'gambar' : profil.foto,
+                'comment' : komeng.comment,
+                'tanggal' : komeng.tanggal
+            })
 
         exis = None
         if request.user.is_authenticated():
